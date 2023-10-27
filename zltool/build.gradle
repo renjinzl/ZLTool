@@ -10,9 +10,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-//                groupId = 'com.petterp'
-//                artifactId = 'statex'
-//                version = '1.0-dev02'
+                groupId = 'com.renjinzl.zltool'
+                artifactId = 'zltool'
+                version = '1.0.1'
             }
         }
     }
