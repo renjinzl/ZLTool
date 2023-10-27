@@ -916,9 +916,7 @@ open class HoverItemDecoration : RecyclerView.ItemDecoration() {
                     //分割线完全显示的情况下, 才绘制阴影
                     val shadowTop = overRect.bottom.toFloat()
                     val shadowHeight = 4 * dp
-
-                    paint.shader = LinearGradient(0f, shadowTop, 0f, shadowTop + shadowHeight, intArrayOf(Color.parseColor("#40000000"), Color.TRANSPARENT /*Color.parseColor("#40000000")*/), null, Shader.TileMode.CLAMP)
-
+                    paint.shader = LinearGradient(0f, shadowTop, 0f, shadowTop + shadowHeight, intArrayOf(Color.parseColor("#40000000"), android.graphics.Color.TRANSPARENT /*Color.parseColor("#40000000")*/), null, Shader.TileMode.CLAMP)
                     //绘制阴影
                     canvas.drawRect(overRect.left.toFloat(), shadowTop, overRect.right.toFloat(), shadowTop + shadowHeight, paint)
                 }
