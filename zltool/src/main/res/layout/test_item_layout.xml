@@ -5,7 +5,7 @@
     <data>
         <variable
             name="data"
-            type="com.renjinzl.tool.view.TestEntity" />
+            type="com.renjinzl.zltool.view.TestEntity" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
