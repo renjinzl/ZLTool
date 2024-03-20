@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="dialog" type="id"/>
+    <item name="activity_title_text_view" type="id"/>
+    <item name="head_left_image_view" type="id"/>
+    <item name="head_right_image_view" type="id"/>
 
 
     <!--圆形-->
