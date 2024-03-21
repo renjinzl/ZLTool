@@ -36,7 +36,6 @@ open class ZLNetResultBean : ZLViewModel() {
         return code == 200
     }
 
-    @CallSuper
     open fun analyze(json: JSONObject?):ZLNetResultBean{
         json?.apply {
             code = optInt("code")
