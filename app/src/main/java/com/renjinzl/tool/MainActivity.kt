@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        AppNetUtils(this, BaseModel::class.java).setUrl("main.html").setParams(mutableMapOf(Pair("do","appInit"))).get {
+        AppNetUtils(this, BaseModel::class.java).setUrl("main.html").setParams(mutableMapOf(Pair("do","appInit"))).post {
             "data".log()
         }
     }

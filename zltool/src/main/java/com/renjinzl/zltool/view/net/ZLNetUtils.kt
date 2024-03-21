@@ -144,7 +144,7 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
 
         val body: RequestBody = mParams.toString().toRequestBody()
 
-        val response = client.newCall(initHeader().post(formBody).build()).enqueue(object : Callback{
+        val response = client.newCall(initHeader().post(formBody).url(getUrl()).build()).enqueue(object : Callback{
             override fun onFailure(call: Call, e: IOException) {
                 callBack(null,success)//todo 请求失败
             }
