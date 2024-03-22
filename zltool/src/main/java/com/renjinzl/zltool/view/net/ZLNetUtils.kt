@@ -42,7 +42,7 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
     private var mParams: JSONObject = JSONObject()
     private var mpPrams: MutableMap<String, Any> = mutableMapOf()
 
-    private var headers: TreeMap<String, Any> = TreeMap<String, Any>()
+    private var headers: TreeMap<String, String> = TreeMap<String, String>()
 
     private var loadingMessage = ""
     private var loadingDialog : Dialog? = null
@@ -61,7 +61,25 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
     }
 
     private fun initHeader(): Request.Builder {
-        return Request.Builder().addHeader("content-type", "application/json")
+
+        val tempRequest = Request.Builder()
+        tempRequest.addHeader("content-type", "application/json")
+        var tempString = ""
+        headers.forEach { (key, value) ->
+            tempRequest.addHeader(key, value)
+            tempString += "$key=$value; "
+        }
+        tempRequest.addHeader("Cookie", MyCookie.getInstance().getCookie())
+
+        return tempRequest
+    }
+
+    fun setHeaders(params: MutableMap<String, String>?): ZLNetUtils<T> {
+        params?.forEach { (key, value) ->
+            headers[key] = value
+            ("$key $value").log("cookie：")
+        }
+        return this
     }
 
     fun setUrl(url: String): ZLNetUtils<T> {
@@ -69,7 +87,7 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
         return this
     }
 
-    private fun getUrl() : String{
+    private fun getUrl(): String {
         return "${baseUrl}$url?"
     }
 
@@ -122,7 +140,7 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.body != null) {
-                    callBack(response.body?.string(), success)
+                    callBack(response, success)
                 } else {
                     callBack(null,success)//todo 请求失败
                 }
@@ -135,13 +153,19 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
         if (!TextUtils.isEmpty(loadingMessage)){
             loadingDialog?.show()
         }
+        var tUrl = ""
         val formBody: FormBody = FormBody.Builder().let {
             mpPrams.forEach { (key, value) ->
                 it.add(key, value.toString())
+                if (!TextUtils.isEmpty(""+value)){
+                    tUrl += "$key=$value&"
+                }
             }
             it.build()
         }
 
+        ZLLog.d("url:↓")
+        ZLLog.d(getUrl()+tUrl)
         val body: RequestBody = mParams.toString().toRequestBody()
 
         val response = client.newCall(initHeader().post(formBody).url(getUrl()).build()).enqueue(object : Callback{
@@ -150,8 +174,10 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
             }
 
             override fun onResponse(call: Call, response: Response) {
+                //保存cookie
+                MyCookie.getInstance().addCookie(response.headers)
                 if (response.body!=null){
-                    callBack(response.body?.string(),success)
+                    callBack(response,success)
                 }else{
                     callBack(null,success)//todo 请求失败
                 }
@@ -160,11 +186,12 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
         return this
     }
 
-    private fun callBack(dataString :String?,success: (T.() -> Unit)?) {
+    private fun callBack(response: Response?,success: (T.() -> Unit)?) {
         loadingDialog?.dismiss()
-//        ZLLog.d("-----${url}-----： "+responseResultBean.message+":"+responseResultBean.data)
-        dataString?.also {
+        ZLLog.d("-----${getUrl()}-----： ")
+        response?.body?.string()?.also {
             try {
+                model.data = it
                 model.analyze(JSONObject(it))
             } catch (e: JSONException) {
                 e.printStackTrace()
@@ -228,7 +255,7 @@ open class ZLNetUtils<T : ZLNetResultBean>(private val any: Any?, private val  m
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.body != null) {
-                    callBack(response.body?.string(),success)
+                    callBack(response,success)
                 } else {
                     callBack(null,success)//todo 请求失败
                 }

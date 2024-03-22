@@ -1,8 +1,12 @@
 package com.renjinzl.tool
 
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.renjinzl.tool.net.AESHelper
 import com.renjinzl.tool.net.AppNetUtils
+import com.renjinzl.tool.net.LogoNetUtils
 import com.renjinzl.zltool.view.log
 import com.renjinzl.zltool.view.net.ZLNetResultBean
 import org.json.JSONObject
@@ -12,14 +16,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        findViewById<View>(R.id.textView).setOnClickListener {
+            LogoNetUtils(this, BaseModel::class.java).setParams(mutableMapOf(Pair("do","EmpLogin"),Pair("username", AESHelper.Encrypt("testWareCQ")),Pair("password",AESHelper.Encrypt("epet2019!")))).post {
+
+                this.data.log("logo_data->")
+
+                AppNetUtils(this@MainActivity, BaseModel::class.java).setUrl("verify/userInfo.html").setParams(mutableMapOf(Pair("do","currenWarehouse"))).get {
+                }.default {
+                    this.data.log("data->")
+                }
+            }
+
+        }
 //        /main.html?do=appInit
     }
 
     override fun onStart() {
         super.onStart()
-        AppNetUtils(this, BaseModel::class.java).setUrl("main.html").setParams(mutableMapOf(Pair("do","appInit"))).post {
-            "data".log()
-        }
+
+        "X15t_gott_auth=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7InVpZCI6MTk2MDk2NiwiYWNJZCI6IjIyOTkwMTkxNjQ5MDk3ODY5IiwibmFtZSI6InRlc3RXYXJlQ1EiLCJvcmdJZCI6IjEwMCJ9LCJpYXQiOjE3MTEwNzAwMDcsImV4cCI6MTcxMTEwNjAwN30.Djf3mOYzrkVQvMRX4onN-JKI7seuatI95dbnfO3kvN4; expires=Mon, 20-Mar-2034 01:13:27 GMT; Max-Age=315360000; path=/; domain=.epet.com"
+            .split(";").forEach { string ->
+
+                string.log("coo:")
+                val cookie = string.split("=")
+                cookie[0].log("key:")
+                cookie[1].log("value:")
+            }
     }
 }
 
@@ -31,8 +53,9 @@ class BaseModel : ZLNetResultBean() {
     }
     override fun analyze(json: JSONObject?): ZLNetResultBean {
         json?.apply {
+            data = this.toString()
             codeState = optString("code")
         }
-        return super.analyze(json)
+        return this
     }
 }
