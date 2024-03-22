@@ -4,7 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/ZLTool/app/src/main/res/drawable/zl_selected_icon.xml" value="0.264" />
-        <entry key="..\:/AndroidStudioProjects/ZLTool/app/src/main/res/layout/activity_main.xml" value="0.5456410256410257" />
+        <entry key="..\:/AndroidStudioProjects/ZLTool/app/src/main/res/layout/activity_main.xml" value="0.4087179487179487" />
+        <entry key="..\:/AndroidStudioProjects/ZLTool/app/src/main/res/layout/item_list.xml" value="0.440625" />
         <entry key="..\:/AndroidStudioProjects/ZLTool/app/src/main/res/layout/test_item_layout.xml" value="0.5541666666666667" />
         <entry key="..\:/AndroidStudioProjects/ZLTool/zltool/src/main/res/drawable/zl_selected_icon.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProjects/ZLTool/zltool/src/main/res/layout/test_item_layout.xml" value="0.41875" />

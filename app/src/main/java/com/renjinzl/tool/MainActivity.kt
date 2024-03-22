@@ -4,10 +4,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.renjinzl.tool.net.AESHelper
 import com.renjinzl.tool.net.AppNetUtils
 import com.renjinzl.tool.net.LogoNetUtils
-import com.renjinzl.zltool.view.log
+import com.renjinzl.zltool.view.*
 import com.renjinzl.zltool.view.net.ZLNetResultBean
 import org.json.JSONObject
 
@@ -27,6 +29,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        }
+
+        findViewById<RecyclerView>(R.id.recyclerView).apply {
+            initVertical()
+            addItemType(ItemView(0))
+
+            val menusInfo: MutableList<ZLViewModel> = arrayListOf()
+
+            menusInfo.apply {
+                add(SettingItem(0, "切换仓库", false, ""))
+            }
+
+            setData(menusInfo)
         }
 //        /main.html?do=appInit
     }
@@ -58,4 +73,33 @@ class BaseModel : ZLNetResultBean() {
         }
         return this
     }
+}
+
+class ItemView(itemType: Int) : ZLRecyclerViewItemView<SettingItem>(itemType, R.layout.item_list) {
+
+    override fun initViews(helper: BaseViewHolder, item: Any) {
+        (item as SettingItem).apply {
+//            helper.setText(R.id.txt_setting_title, item.title)
+//            helper.setText(R.id.txt_tip, item.tip)
+        }
+    }
+}
+class SettingItem(override val itemType: Int) : ZLViewModel() {
+
+    var title = ""
+    var isCatch = true
+    var tip = ""
+
+    constructor(itemType: Int,title: String, isCatch: Boolean) : this(itemType) {
+        this.title = title
+        this.isCatch = isCatch
+        tip = ""
+    }
+
+    constructor(itemType: Int,title: String, isCatch: Boolean, tip: String): this(itemType)  {
+        this.title = title
+        this.isCatch = isCatch
+        this.tip = tip
+    }
+
 }
