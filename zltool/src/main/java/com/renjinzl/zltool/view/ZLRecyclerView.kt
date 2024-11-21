@@ -37,7 +37,7 @@ import com.renjinzl.zltool.R
  * Version  1.0.0   @Update 2022-06-08 13:54   起航
  * Describe 描述
  */
-class ZLRecyclerViewAdapter<VH : ZLViewHolder>(private val recyclerView : RecyclerView, data: MutableList<ZLViewModel>?) : BaseMultiItemQuickAdapter<ZLViewModel, VH>(data), OnItemClickListener, OnItemChildClickListener ,
+class ZLRecyclerViewAdapter<VH : BaseViewHolder>(private val recyclerView : RecyclerView, data: MutableList<ZLViewModel>?) : BaseMultiItemQuickAdapter<ZLViewModel, VH>(data), OnItemClickListener, OnItemChildClickListener ,
     OnItemLongClickListener {
 
     var mOnRecyclerViewItemClickListeners: MutableList<OnItemClickListener> = arrayListOf()
