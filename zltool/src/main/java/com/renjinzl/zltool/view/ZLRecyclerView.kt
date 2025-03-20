@@ -160,10 +160,10 @@ abstract class ZLRecyclerViewItemView<T : MultiItemEntity>(open val itemType: In
 val RecyclerView.viewItems: MutableMap<Int, ZLRecyclerViewItemView<*>>
 //= mutableMapOf()
     get() {
-    if (getTag(R.id.content) == null){
-        setTag(R.id.content,mutableMapOf<Int, ZLRecyclerViewItemView<*>>())
+    if (getTag(com.chad.library.R.id.content) == null){
+        setTag(com.chad.library.R.id.content,mutableMapOf<Int, ZLRecyclerViewItemView<*>>())
     }
-        return getTag(R.id.content) as MutableMap<Int, ZLRecyclerViewItemView<*>>
+        return getTag(com.chad.library.R.id.content) as MutableMap<Int, ZLRecyclerViewItemView<*>>
     }
 //    set(value) = setTag(R.id.content,value)
 
@@ -413,4 +413,29 @@ fun navBarHeight(context: Context): Int {
 
 public val <T> T.dp: Float by lazy {
     Resources.getSystem()?.displayMetrics?.density ?: 0f
+}
+
+
+class MarginItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        //列表第一个的item的top需要留出space的距离
+        if (parent.getChildAdapterPosition(view) > 0){
+            outRect.top = space
+        }
+//        outRect.bottom = space
+//        outRect.left = space
+//        outRect.right = space
+    }
+}
+
+fun RecyclerView.addFooterView(high:Int = 10) {
+    tempAdapter.addFooterView(View(context).apply {
+        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(high))
+    })
+}
+
+fun RecyclerView.addHeaderView(high:Int = 10) {
+    tempAdapter.addHeaderView(View(context).apply {
+        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(high))
+    })
 }

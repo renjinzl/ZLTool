@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.viewbinding.ViewBinding
 import com.renjinzl.zltool.R
 import com.renjinzl.zltool.view.utils.HeadHelper
@@ -35,36 +34,40 @@ abstract class BaseActivity<T : ViewBinding>(private val bindingLayout : Int = 0
         return 0
     }
 
+    @Deprecated("不用了，使用第三方替代")
     var blockResult: ((pathList: List<String>) -> Unit)? = null
 
     var headHelper: HeadHelper? = null
 
-    protected lateinit var binding: T
+    protected var _binding: T? = null
+
+    protected val binding get() = _binding!!
+
+    protected abstract fun getViewBinding(): T
 
     abstract fun initView()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (isFullScreen()) {
+//            enableEdgeToEdge()
             setScreenFullNavigationBar()
         }
-        statusBarColor(true)
+//        statusBarColor(true)
         AppManager.instance().addActivity(this)
         super.onCreate(savedInstanceState)
 
-        if (hasContentHead() && getHeadLayout() != 0) {
+        _binding = getViewBinding()
+
+        if (getHeadLayout() != 0) {
             super.setContentView(R.layout.zl_activity_head_layout)
-            layoutInflater.inflate(getHeadLayout(),findViewById(R.id.content_layout))
+            layoutInflater.inflate(getHeadLayout(), findViewById(R.id.head_layout))
+            findViewById<FrameLayout>(R.id.content_layout).addView(binding.root)
+        } else {
+            super.setContentView(binding.root)
         }
 
-        if (bindingLayout != 0) {
-            binding = if (hasContentHead()) {
-                DataBindingUtil.inflate(layoutInflater, bindingLayout, findViewById<FrameLayout>(R.id.content_layout), true)
-            } else {
-                DataBindingUtil.setContentView(this, bindingLayout)
-            }
-            headHelper = HeadHelper().initView(this)
-        }
         initView()
+
     }
 
     override fun setTitle(title: CharSequence?) {
@@ -73,6 +76,8 @@ abstract class BaseActivity<T : ViewBinding>(private val bindingLayout : Int = 0
         headHelper?.setTitle(title)
     }
 
+
+    @Deprecated("不用了，使用第三方替代")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         //只选择了一个

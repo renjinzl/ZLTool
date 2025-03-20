@@ -2,9 +2,19 @@ package com.renjinzl.tool
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.renjinzl.tool.net.AESHelper
 import com.renjinzl.tool.net.AppNetUtils
@@ -35,10 +45,15 @@ class MainActivity : AppCompatActivity() {
             initVertical()
             addItemType(ItemView(0))
 
+            addItemDecoration(MarginItemDecoration(dp2px(20)))
+
             val menusInfo: MutableList<ZLViewModel> = arrayListOf()
 
             menusInfo.apply {
-                add(SettingItem(0, "切换仓库", false, ""))
+                for (i in 0..100){
+                    add(SettingItem(0, "切换仓库", false, ""))
+
+                }
             }
 
             setData(menusInfo)
@@ -79,7 +94,7 @@ class ItemView(itemType: Int) : ZLRecyclerViewItemView<SettingItem>(itemType, R.
 
     override fun initViews(helper: BaseViewHolder, item: Any) {
         (item as SettingItem).apply {
-//            helper.setText(R.id.txt_setting_title, item.title)
+            helper.setText(R.id.itemView, item.title)
 //            helper.setText(R.id.txt_tip, item.tip)
         }
     }
